@@ -1,0 +1,265 @@
+﻿<mah:MetroWindow x:Class="BBTracker.Views.GameView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BBTracker.Views"
+        mc:Ignorable="d"
+        Title="GameView" Height="600" Width="800">
+    <Grid Margin="15" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="1.2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+
+        <Button x:Name="StartGameButton" Grid.Row="0" Grid.Column="1" IsEnabled="{Binding GameNotStarted}"
+                Content="Start" Command="{Binding StartGameCommand}"/>
+        <Button x:Name="EndGameButton" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding GameStarted}"
+                Content="Koniec" Command="{Binding EndGameCommand}"/>
+        <Button x:Name="SwitchPossesionButton" Grid.Row="1" Grid.Column="1" 
+                Content="Zmiana posiadania" Command="{Binding SwitchPossesionCommand}"/>
+        <ItemsControl ItemsSource="{Binding Plays}" Grid.Row="3" Grid.Column="1">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding GameTime}"/>
+                        <TextBlock Text="{Binding PlayType}"/>
+                        <TextBlock Text="{Binding Player.FirstName}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl x:Name="TeamAItemsControl" ItemsSource="{Binding TeamAOnCourt,NotifyOnSourceUpdated=True}" Grid.Row="2" Grid.Column="0"
+                          BorderBrush="Azure" BorderThickness="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="SelectPlayerButton" Content="{Binding FullName}" 
+                                IsEnabled="{Binding DataContext.TeamAPlayersActive,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}"
+                                Command="{Binding DataContext.ChoosePlayerCommand,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
+                        <!--<TextBlock Text="{Binding FirstName}" Height="auto" Padding="5" Width="100"/>
+                            <TextBlock Text="{Binding Nick}" Height="auto" Padding="5" Width="100"/>
+                            <TextBlock Text="{Binding LastName}" Height="auto" Padding="5" Width="100"/>-->
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl x:Name="TeamBItemsControl" ItemsSource="{Binding TeamBOnCourt}" Grid.Row="2" Grid.Column="2"
+                          BorderBrush="Azure" BorderThickness="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="SelectPlayerButton" Content="{Binding FullName}" 
+                                IsEnabled="{Binding DataContext.TeamBPlayersActive,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}"
+                                Command="{Binding DataContext.ChoosePlayerCommand,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
+                        <!--<TextBlock Text="{Binding FirstName}" Height="auto" Padding="5" Width="100"/>
+                            <TextBlock Text="{Binding Nick}" Height="auto" Padding="5" Width="100"/>
+                            <TextBlock Text="{Binding LastName}" Height="auto" Padding="5" Width="100"/>-->
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Grid Grid.Column="1" Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="FieldGoalButton" Content="Rzut" Grid.Column="0" Grid.ColumnSpan="2"
+                IsEnabled="{Binding DefaultButtonsActive}"
+                Visibility="{Binding DefaultButtonsVisibility}"
+                Command="{Binding ChoosePlayCommand}" CommandParameter="FieldGoal"/>
+            <!--<Button x:Name="ReboundButton" Content="Zbiórka"
+                IsEnabled="{Binding DefaultButtonsActive}"
+                Visibility="{Binding DefaultButtonsVisibility}"
+                Command="{Binding ReboundCommand}"/>-->
+            <Button x:Name="TurnoverButton" Content="Strata" Grid.Column="2" Grid.ColumnSpan="2"
+                    IsEnabled="{Binding DefaultButtonsActive}" 
+                    Visibility="{Binding DefaultButtonsVisibility}"
+                    Command="{Binding ChoosePlayCommand}" CommandParameter="Turnover"/>
+            <Button x:Name="SubstitutionButton" Content="Zmiana" Grid.Column="4" Grid.ColumnSpan="2"
+                    IsEnabled="{Binding DefaultButtonsActive}"
+                    Visibility="{Binding DefaultButtonsVisibility}"
+                    Command="{Binding ChoosePlayCommand}" CommandParameter="Substitution"/>
+
+
+            <Button x:Name="TwoPointsButton" Content="2 punkty" Grid.Column="0" Grid.ColumnSpan="3"
+                    Visibility="{Binding ChoosePointsVisibility}"
+                    Command="{Binding ChoosePointsCommand}" CommandParameter="2"/>
+            <Button x:Name="ThreePointsButton" Content="3 punkty" Grid.Column="3" Grid.ColumnSpan="3"
+                    Visibility="{Binding ChoosePointsVisibility}"
+                    Command="{Binding ChoosePointsCommand}" CommandParameter="3"/>
+
+            <Button x:Name="MadeFieldGoalButton" Content="Trafiony" Grid.Column="0" Grid.ColumnSpan="2"
+                    Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Made"/>
+            <Button x:Name="MissedFieldGoalButton" Content="Nietrafiony" Grid.Column="2" Grid.ColumnSpan="2"
+                    Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Missed"/>
+            <Button x:Name="BlockedFieldGoalButton" Content="Zablokowany" Grid.Column="4" Grid.ColumnSpan="2"
+                    Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Blocked"/>
+
+            <Button x:Name="NoAssistButton" Content="Bez asysty" Grid.Column="0" Grid.ColumnSpan="6"
+                    Visibility="{Binding ChooseAssisterVisibility}"
+                    Command="{Binding NoAssistCommand}"/>
+
+            <Button x:Name="NoReboundButton" Content="Bez zbiórki" Grid.Column="0" Grid.ColumnSpan="6"
+                    Visibility="{Binding ChooseRebounderVisibility}"
+                    Command="{Binding NoReboundCommand}"/>
+
+            <Button x:Name="NoStealButton" Content="Bez przechwytu" Grid.Column="0" Grid.ColumnSpan="6"
+                    Visibility="{Binding ChooseTurnoverCauserVisibility}"
+                    Command="{Binding NoReboundCommand}"/>
+        </Grid>
+        <TextBlock x:Name="Info" Text="{Binding InfoText}" FontSize="14" Foreground="Crimson"/>
+
+        <ItemsControl x:Name="TeamABenchItemsControl" ItemsSource="{Binding TeamABench}" Grid.Row="3" Grid.Column="0"
+                          BorderBrush="Azure" BorderThickness="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="SelectPlayerButton" Content="{Binding FullName}" 
+                                IsEnabled="{Binding DataContext.TeamABenchActive,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}"
+                                Command="{Binding DataContext.ChoosePlayerCommand,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl x:Name="TeamBBenchItemsControl" ItemsSource="{Binding TeamBBench}" Grid.Row="3" Grid.Column="2"
+                          BorderBrush="Azure" BorderThickness="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="SelectPlayerButton" Content="{Binding FullName}" 
+                                IsEnabled="{Binding DataContext.TeamBBenchActive,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}"
+                                Command="{Binding DataContext.ChoosePlayerCommand,
+                                        RelativeSource={RelativeSource Mode=FindAncestor,
+                                                         AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding Id}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid Grid.Row="4" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>                
+            </Grid.ColumnDefinitions>
+            <Label Content="Zawodnik" Grid.Column="0" BorderThickness="1" />
+            <Label Content="Min" Grid.Column="1" BorderThickness="1"/>
+            <Label Content="P" Grid.Column="2" BorderThickness="1"/>
+            <Label Content="A" Grid.Column="3" BorderThickness="1"/>
+            <Label Content="ZD" Grid.Column="4" BorderThickness="1"/>
+            <Label Content="ZO" Grid.Column="5" BorderThickness="1"/>
+            <Label Content="B" Grid.Column="6" BorderThickness="1"/>
+            
+        </Grid>
+
+        <Grid Grid.Row="4" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Content="Zawodnik" Grid.Column="0" BorderThickness="1" />
+            <Label Content="Min" Grid.Column="1" BorderThickness="1"/>
+            <Label Content="P" Grid.Column="2" BorderThickness="1"/>
+            <Label Content="A" Grid.Column="3" BorderThickness="1"/>
+            <Label Content="ZD" Grid.Column="4" BorderThickness="1"/>
+            <Label Content="ZO" Grid.Column="5" BorderThickness="1"/>
+            <Label Content="B" Grid.Column="6" BorderThickness="1"/>
+
+        </Grid>
+
+        <ItemsControl ItemsSource="{Binding StatsListTeamA}" Grid.Row="5" Grid.Column="0" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--<TextBlock Text="1"/>-->
+                        <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Minutes}" Grid.Column="1"/>
+                        <TextBlock Text="{Binding Points}" Grid.Column="2"/>
+                        <TextBlock Text="{Binding Rebounds}" Grid.Column="4"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl ItemsSource="{Binding StatsListTeamB}" Grid.Row="5" Grid.Column="0" >
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.5*"/>
+                            <ColumnDefinition Width="1.5*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!--<TextBlock Text="1"/>-->
+                        <TextBlock Text="{Binding Name}" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Minutes}" Grid.Column="1"/>
+                        <TextBlock Text="{Binding Points}" Grid.Column="2"/>
+                        <TextBlock Text="{Binding Rebounds}" Grid.Column="4"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+    </Grid>
+
+</mah:MetroWindow>
+
+    

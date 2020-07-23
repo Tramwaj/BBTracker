@@ -1,0 +1,21 @@
+﻿<mah:MetroWindow x:Class="BBTracker.Views.NewPlayerView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BBTracker.Views"
+        mc:Ignorable="d"
+        Title="Zawodnik" Height="450" Width="450">
+    <StackPanel>
+        <TextBlock Text="Imię"/>
+        <TextBox x:Name="FirstName" Text="{Binding FirstName}"/>
+
+        <TextBlock Text="Nazwisko"/>
+        <TextBox x:Name="LastName" Text="{Binding LastName}"/>
+        
+        <TextBlock Text="Ksywa"/>
+        <TextBox x:Name="Nick" Text="{Binding Nick}"/>
+
+    </StackPanel>
+</mah:MetroWindow>

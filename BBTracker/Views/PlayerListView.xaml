@@ -1,0 +1,41 @@
+﻿<mah:MetroWindow x:Class="BBTracker.Views.PlayerListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BBTracker.Views"
+        mc:Ignorable="d"
+        Title="PlayerListView" Height="450" Width="800">
+    <!--<mah:MetroWindow.CommandBindings>
+        <CommandBinding Command="SavePlayers" Executed="SavePlayers_Executed" CanExecute="SavePlayerd_CanExecute"/>
+    </mah:MetroWindow.CommandBindings>-->
+    
+    
+    <StackPanel>
+        <DataGrid x:Name="PlayerListDG" ItemsSource="{Binding Players}" AutoGenerateColumns="False" IsSynchronizedWithCurrentItem="True">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Imię" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Ksywka" Binding="{Binding Nick}"/>
+                <DataGridTextColumn Header="Nazwisko" Binding="{Binding LastName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <!--<ListBox x:Name="LBox" ItemsSource="{Binding Players}" >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="Imię"/>
+                        <TextBox Text="{Binding FirstName}"/>
+                        <TextBlock Text="Nazwisko"/>
+                        <TextBox Text="{Binding LastName}"/>
+
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>-->
+        <Button x:Name="AddOneButton" Command="{Binding AddOneCommand}">Dodaj zioma</Button>
+        <Button x:Name="Submit" Command="{Binding SavePlayersCommand}">Zapisz</Button>
+    </StackPanel>
+    
+</mah:MetroWindow>
+    
