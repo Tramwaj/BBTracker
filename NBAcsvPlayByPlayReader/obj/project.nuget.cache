@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "8WUtusMuCUvH7S6ucxICuqvWYRwSKtC/qeAheXG/z1Id1MXJR1UbQFcmvbeADHkaalkk4Efyqok9hYTXHK8kkA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Admin\\source\\repos\\BBTracker\\NBAcsvPlayByPlayReader\\NBAcsvPlayByPlayReader.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\csvhelper\\15.0.5\\csvhelper.15.0.5.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

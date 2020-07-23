@@ -1,0 +1,9 @@
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\bin\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.deps.json
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\bin\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.dll
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\bin\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.pdb
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.csprojAssemblyReference.cache
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.AssemblyInfoInputs.cache
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.AssemblyInfo.cs
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.dll
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.pdb
+C:\Users\Admin\source\repos\BBTracker\NBAcsvPlayByPlayReader\obj\Debug\netcoreapp3.1\NBAcsvPlayByPlayReader.csproj.CoreCompileInputs.cache

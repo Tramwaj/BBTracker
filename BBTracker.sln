@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BBTracker", "BBTracker\BBTracker.csproj", "{B1A72B3C-D6B8-4E44-9B06-A44EDA0D05FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NBAcsvPlayByPlayReader", "NBAcsvPlayByPlayReader\NBAcsvPlayByPlayReader.csproj", "{4DB76919-E0E6-4A06-AD3A-502866098F54}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1A72B3C-D6B8-4E44-9B06-A44EDA0D05FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A72B3C-D6B8-4E44-9B06-A44EDA0D05FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A72B3C-D6B8-4E44-9B06-A44EDA0D05FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A72B3C-D6B8-4E44-9B06-A44EDA0D05FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DB76919-E0E6-4A06-AD3A-502866098F54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DB76919-E0E6-4A06-AD3A-502866098F54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DB76919-E0E6-4A06-AD3A-502866098F54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DB76919-E0E6-4A06-AD3A-502866098F54}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B76BBA3-BDCA-40F6-9A4F-63F4D0B1F947}
+	EndGlobalSection
+EndGlobal
