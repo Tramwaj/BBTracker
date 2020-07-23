@@ -53,8 +53,7 @@ namespace BBTracker.ViewModels
             CrudeTeamSettings();
             //SetDefaultButtonsVisible();
             SetZeroVisibility();
-            GameNotStarted = true;
-            InfoText = "blablabla";
+            GameNotStarted = true;            
             StatsListTeamA = new ObservableCollection<PlayerStats>();
             StatsServiceA = new CurrentStatsService(StatsListTeamA);
             StatsListTeamB = new ObservableCollection<PlayerStats>();
@@ -125,7 +124,12 @@ namespace BBTracker.ViewModels
         public ICommand StartGameCommand { get; private set; }
         private void StartGame()
         {
-            Game = new Game { Start = DateTime.Now };
+            Game = new Game
+            {
+                Start = DateTime.Now,
+                ScoreA = 0,
+                ScoreB = 0
+            };
             Plays = new ObservableCollection<Play>();
 
             Plays.CollectionChanged += UpdateStatsHandler;
@@ -136,7 +140,7 @@ namespace BBTracker.ViewModels
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
             GameNotStarted = false;
-            GameStarted = true;
+            GameStarted = true;            
         }
 
         private void AddPlayerGames()
@@ -369,6 +373,15 @@ namespace BBTracker.ViewModels
             Plays.Add(_play);
             _play = NewPlayFrom(_play, PlayType.Assist, true);
 
+            if (_play.TeamB)
+            {
+                Game.ScoreB += _play.Points;
+            }
+            else
+            {
+                Game.ScoreA += _play.Points;
+            }
+
             SwitchPossession();
             ChooseAssisterVisibility = Visibility.Visible;
             SetPlayersVisibility(true); //possesion changed, so to look for a player from the same team - we have to set 'otherteam' = true
@@ -427,7 +440,7 @@ namespace BBTracker.ViewModels
                 Time = _play.Time,
                 GameTime = _play.GameTime,
                 Points = _play.Points != 0 ? _play.Points : 0,
-                TeamB = _sameTeam?_play.TeamB:!_play.TeamB
+                TeamB = _sameTeam ? _play.TeamB : !_play.TeamB
             };
         }
 
@@ -449,12 +462,14 @@ namespace BBTracker.ViewModels
             DefaultButtonsActive = false;
             TeamBBenchActive = false;
             TeamBBenchActive = false;
+            InfoText = "Wybierz zawodnika";
         }
 
         private void SetAllPlayersVisibility()
         {
             TeamAPlayersActive = true;
             TeamBPlayersActive = true;
+            InfoText = "Wybierz zawodnika";
         }
 
         private void SetBenchPlayersVisibility()
@@ -467,6 +482,7 @@ namespace BBTracker.ViewModels
             {
                 TeamABenchActive = true;
             }
+            InfoText = "Wybierz zawodnika";
         }
 
         private void SetDefaultButtonsVisibleOnly()

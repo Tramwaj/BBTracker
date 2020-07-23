@@ -7,17 +7,19 @@ using System.Windows.Navigation;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Security.RightsManagement;
 
 namespace BBTracker.Services
 {
     public class CurrentStatsService
     {
-        public ObservableCollection<PlayerStats> PlayersStatsList { get; set; }
+        public ObservableCollection<PlayerStats> PlayersStatsList { get; private set; }        
 
         public CurrentStatsService(ObservableCollection<PlayerStats> playerStats)
         {
             PlayersStatsList = playerStats;
         }
+          
 
         public void AddPlay(Play play)
         {
@@ -68,7 +70,7 @@ namespace BBTracker.Services
                     }
                     else
                     {
-                        _player.DefensiveRebound++;
+                        _player.DefensiveRebounds++;
                     }
                     break;
                 case PlayType.Steal:
@@ -92,6 +94,10 @@ namespace BBTracker.Services
                 AddPlay(play);
             }
         }
+        public int TotalPoints()
+        {
+            return PlayersStatsList.Sum(p => p.Points);
+        }
 
     }
     public class PlayerStats : INotifyPropertyChanged
@@ -101,7 +107,7 @@ namespace BBTracker.Services
         public int Points { get; set; }
         public int Rebounds { get; set; }
         public int Assists { get; set; }
-        public int DefensiveRebound { get; set; }
+        public int DefensiveRebounds { get; set; }
         public int OffensiveRebounds { get; set; }
         public int Steals { get; set; }
         public int Blocks { get; set; }
@@ -114,9 +120,9 @@ namespace BBTracker.Services
         public double Percentage3pFG { get => Attempted3pFG > 0 ? (Made3pFG / Attempted3pFG) * 100 : 0; private set { } }
         public TimeSpan PlayingTime { get ; set; }
         public int Minutes { get => (int)PlayingTime.TotalMinutes; }
-        public DateTime CheckInTime { get; set; }
-                
-        public event PropertyChangedEventHandler PropertyChanged;
+        public DateTime CheckInTime { get; set; }        
+
+    public event PropertyChangedEventHandler PropertyChanged;
     }
 }
 

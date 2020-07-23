@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BBTracker.Models
 {
-    public class Game
+    public class Game : INotifyPropertyChanged
     {
         public int Id { get; set; }
         public DateTime Start { get; set; }
@@ -14,5 +14,7 @@ namespace BBTracker.Models
         public int? ScoreB { get; set; }
         public virtual ICollection<Play> Plays { get; set; } = new List<Play>();
         public virtual ICollection<PlayerGame> PlayerGames { get; set; } = new List<PlayerGame>();
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

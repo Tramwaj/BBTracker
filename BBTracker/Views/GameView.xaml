@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BBTracker.Views"
         mc:Ignorable="d"
-        Title="GameView" Height="600" Width="800">
+        Title="GameView" Height="660" Width="800">
     <Grid Margin="15" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -19,15 +19,20 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.4*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2.2*"/>
         </Grid.RowDefinitions>
 
         <Button x:Name="StartGameButton" Grid.Row="0" Grid.Column="1" IsEnabled="{Binding GameNotStarted}"
                 Content="Start" Command="{Binding StartGameCommand}"/>
         <Button x:Name="EndGameButton" Grid.Row="5" Grid.Column="1" IsEnabled="{Binding GameStarted}"
                 Content="Koniec" Command="{Binding EndGameCommand}"/>
-        <Button x:Name="SwitchPossesionButton" Grid.Row="1" Grid.Column="1" 
+        <Button x:Name="SwitchPossesionButton" Grid.Row="1" Grid.Column="1" Margin="0,0,0,20"
                 Content="Zmiana posiadania" Command="{Binding SwitchPossesionCommand}"/>
+        <TextBlock x:Name="Info" Text="{Binding InfoText}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Center"  FontSize="14" Foreground="Crimson"/>
+
+        <Label Content="{Binding Game.ScoreA}" Grid.Row="1" Grid.Column="0" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Label Content="{Binding Game.ScoreB}" Grid.Row="1" Grid.Column="2" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
         <ItemsControl ItemsSource="{Binding Plays}" Grid.Row="3" Grid.Column="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
@@ -134,7 +139,7 @@
                     Visibility="{Binding ChooseTurnoverCauserVisibility}"
                     Command="{Binding NoReboundCommand}"/>
         </Grid>
-        <TextBlock x:Name="Info" Text="{Binding InfoText}" FontSize="14" Foreground="Crimson"/>
+        
 
         <ItemsControl x:Name="TeamABenchItemsControl" ItemsSource="{Binding TeamABench}" Grid.Row="3" Grid.Column="0"
                           BorderBrush="Azure" BorderThickness="4">
@@ -212,8 +217,7 @@
 
         <ItemsControl ItemsSource="{Binding StatsListTeamA}" Grid.Row="5" Grid.Column="0" >
             <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    
+                <DataTemplate>                    
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2.5*"/>
@@ -225,19 +229,21 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <!--<TextBlock Text="1"/>-->
-                        <TextBlock Text="{Binding Name}" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Minutes}" Grid.Column="1"/>
-                        <TextBlock Text="{Binding Points}" Grid.Column="2"/>
-                        <TextBlock Text="{Binding Rebounds}" Grid.Column="4"/>
+                        <Label Content="{Binding Name}" Grid.Column="0"/>
+                        <Label Content="{Binding Minutes}" Grid.Column="1"/>
+                        <Label Content="{Binding Points}" Grid.Column="2"/>
+                        <Label Content="{Binding Assists}" Grid.Column="3"/>
+                        <Label Content="{Binding DefensiveRebounds}" Grid.Column="4"/>
+                        <Label Content="{Binding OffensiveRebounds}" Grid.Column="5"/>
+                        <Label Content="{Binding Blocks}" Grid.Column="6"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <ItemsControl ItemsSource="{Binding StatsListTeamB}" Grid.Row="5" Grid.Column="0" >
+        <ItemsControl ItemsSource="{Binding StatsListTeamB}" Grid.Row="5" Grid.Column="2" >
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2.5*"/>
@@ -249,10 +255,13 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <!--<TextBlock Text="1"/>-->
-                        <TextBlock Text="{Binding Name}" Grid.Column="0"/>
-                        <TextBlock Text="{Binding Minutes}" Grid.Column="1"/>
-                        <TextBlock Text="{Binding Points}" Grid.Column="2"/>
-                        <TextBlock Text="{Binding Rebounds}" Grid.Column="4"/>
+                        <Label Content="{Binding Name}" Grid.Column="0"/>
+                        <Label Content="{Binding Minutes}" Grid.Column="1"/>
+                        <Label Content="{Binding Points}" Grid.Column="2"/>
+                        <Label Content="{Binding Assists}" Grid.Column="3"/>
+                        <Label Content="{Binding DefensiveRebounds}" Grid.Column="4"/>
+                        <Label Content="{Binding OffensiveRebounds}" Grid.Column="5"/>
+                        <Label Content="{Binding Blocks}" Grid.Column="6"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

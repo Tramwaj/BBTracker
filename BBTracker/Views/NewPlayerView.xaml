@@ -17,5 +17,9 @@
         <TextBlock Text="Ksywa"/>
         <TextBox x:Name="Nick" Text="{Binding Nick}"/>
 
+        <Button Content="Dodaj"/>
+
+        <Button Content="Anuluj"/>
+
     </StackPanel>
 </mah:MetroWindow>
