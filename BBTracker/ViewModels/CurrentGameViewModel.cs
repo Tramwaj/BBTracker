@@ -20,7 +20,7 @@ using System.Windows.Media;
 
 namespace BBTracker.ViewModels
 {
-    class GameViewModel : INotifyPropertyChanged, INotifyCollectionChanged
+    class CurrentGameViewModel : INotifyPropertyChanged, INotifyCollectionChanged
     {
         public Game Game { get; set; }
         public List<Player> Players { get; set; }
@@ -46,7 +46,7 @@ namespace BBTracker.ViewModels
         public ObservableCollection<PlayerStats> StatsListTeamB { get; set; }
         public CurrentStatsService StatsServiceB;
 
-        public GameViewModel()
+        public CurrentGameViewModel()
         {
             Players = GetPlayers();
             InitializeCommands();
@@ -124,12 +124,7 @@ namespace BBTracker.ViewModels
         public ICommand StartGameCommand { get; private set; }
         private void StartGame()
         {
-            Game = new Game
-            {
-                Start = DateTime.Now,
-                ScoreA = 0,
-                ScoreB = 0
-            };
+            Game = new Game();
             Plays = new ObservableCollection<Play>();
 
             Plays.CollectionChanged += UpdateStatsHandler;
@@ -174,9 +169,7 @@ namespace BBTracker.ViewModels
             CheckOutPlayers();
             Game.Plays = Plays;
             Game.PlayerGames = PlayerGames;
-            //Game.ScoreA
-            //Game.ScoreB
-            //using var _context = new BBTrackerContext();
+
             _context.Games.Add(Game);
             _context.Plays.AddRange(Plays);
 
@@ -188,7 +181,7 @@ namespace BBTracker.ViewModels
         }
 
         private void CheckInPlayers()
-        {
+        {            
             foreach (Player player in TeamAOnCourt)
             {
                 Plays.Add(new Play
@@ -217,6 +210,7 @@ namespace BBTracker.ViewModels
         {
             foreach (Player player in TeamAOnCourt)
             {
+                //PlayFac.ChoosePlayer(player,false);
                 Plays.Add(new Play
                 {
                     Player = player,
@@ -282,7 +276,7 @@ namespace BBTracker.ViewModels
                     }
 
                 }
-                _play.TeamB = TeamB.Contains(_play.Player) ? true : false;
+                _play.TeamB = TeamB.Contains(_play.Player);
                 Plays.Add(_play);
                 _play = null;
                 InfoText = "Wybierz zawodnika";
@@ -385,6 +379,7 @@ namespace BBTracker.ViewModels
             SwitchPossession();
             ChooseAssisterVisibility = Visibility.Visible;
             SetPlayersVisibility(true); //possesion changed, so to look for a player from the same team - we have to set 'otherteam' = true
+            InfoText = "Kto asystował?";
         }
 
         public ICommand NoAssistCommand { get; set; }
@@ -393,6 +388,7 @@ namespace BBTracker.ViewModels
             _play = null;
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
+            InfoText = "Wybierz zawodnika";
         }
 
         public ICommand NoStealCommand { get; set; }
@@ -401,6 +397,7 @@ namespace BBTracker.ViewModels
             _play = null;
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
+            InfoText = "Wybierz zawodnika";
         }
 
         private void MissedFieldGoal()
@@ -420,6 +417,7 @@ namespace BBTracker.ViewModels
             _play = null;
             SwitchPossession();
             SetDefaultButtonsVisibleOnly();
+            InfoText = "Wybierz zawodnika";
         }
 
         private void BlockedFieldGoal()
@@ -461,8 +459,7 @@ namespace BBTracker.ViewModels
             //TeamBPlayersActive = true;
             DefaultButtonsActive = false;
             TeamBBenchActive = false;
-            TeamBBenchActive = false;
-            InfoText = "Wybierz zawodnika";
+            TeamBBenchActive = false;            
         }
 
         private void SetAllPlayersVisibility()

@@ -1,4 +1,4 @@
-﻿<mah:MetroWindow x:Class="BBTracker.Views.GameView"
+﻿<mah:MetroWindow x:Class="BBTracker.Views.CurrentGameView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BBTracker.Views"
         mc:Ignorable="d"
-        Title="GameView" Height="660" Width="800">
+        Title="GameView" Height="660" Width="880">
     <Grid Margin="15" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -32,18 +32,19 @@
 
         <Label Content="{Binding Game.ScoreA}" Grid.Row="1" Grid.Column="0" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         <Label Content="{Binding Game.ScoreB}" Grid.Row="1" Grid.Column="2" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-        <ItemsControl ItemsSource="{Binding Plays}" Grid.Row="3" Grid.Column="1">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding GameTime}"/>
-                        <TextBlock Text="{Binding PlayType}"/>
-                        <TextBlock Text="{Binding Player.FirstName}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="3" Grid.Column="1">
+            <ItemsControl ItemsSource="{Binding Plays}" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding GameTime,StringFormat='{}{0:mm}:{0:ss}'}"/>
+                            <TextBlock Text="{Binding PlayType}"/>
+                            <TextBlock Text="{Binding Player.FirstName}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
         <ItemsControl x:Name="TeamAItemsControl" ItemsSource="{Binding TeamAOnCourt,NotifyOnSourceUpdated=True}" Grid.Row="2" Grid.Column="0"
                           BorderBrush="Azure" BorderThickness="4">
             <ItemsControl.ItemTemplate>
@@ -139,7 +140,7 @@
                     Visibility="{Binding ChooseTurnoverCauserVisibility}"
                     Command="{Binding NoReboundCommand}"/>
         </Grid>
-        
+
 
         <ItemsControl x:Name="TeamABenchItemsControl" ItemsSource="{Binding TeamABench}" Grid.Row="3" Grid.Column="0"
                           BorderBrush="Azure" BorderThickness="4">
@@ -183,7 +184,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>                
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Content="Zawodnik" Grid.Column="0" BorderThickness="1" />
             <Label Content="Min" Grid.Column="1" BorderThickness="1"/>
@@ -192,7 +193,7 @@
             <Label Content="ZD" Grid.Column="4" BorderThickness="1"/>
             <Label Content="ZO" Grid.Column="5" BorderThickness="1"/>
             <Label Content="B" Grid.Column="6" BorderThickness="1"/>
-            
+
         </Grid>
 
         <Grid Grid.Row="4" Grid.Column="2">
@@ -217,7 +218,7 @@
 
         <ItemsControl ItemsSource="{Binding StatsListTeamA}" Grid.Row="5" Grid.Column="0" >
             <ItemsControl.ItemTemplate>
-                <DataTemplate>                    
+                <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2.5*"/>

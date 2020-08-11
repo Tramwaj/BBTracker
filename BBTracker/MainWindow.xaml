@@ -21,14 +21,15 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="2*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <Button x:Name="NewGameButton" Command="{Binding NewGameCommand}" Grid.Column="1" Grid.Row="1" Margin="15" FontSize="20" Click="NewGameButton_Click">Nowy mecz</Button>
-        <Button x:Name="StatsButton" Grid.Column="5" Grid.Row="1" Margin="15" FontSize="20">Statystyki</Button>
-        <Button x:Name="PlayersButton" Grid.Column="5" Grid.Row="2" Margin="15" FontSize="20" Click="PlayersButton_Click">Zawodnicy</Button>
-        <Button x:Name="NewPlayerButton" Grid.Column="3" Grid.Row="1" FontSize="15" Height="80" Click="NewPlayerButton_Click">Nowy</Button>
+        <Button x:Name="NewGameButton" Command="{Binding NewGameCommand}" Grid.Column="1" Grid.Row="1" Margin="15" FontSize="20" >Nowy mecz</Button>
+        <Button x:Name="StatsButton" Command ="{Binding StatsViewCommand}" Grid.Column="5" Grid.Row="1" Margin="15" FontSize="20">Statystyki</Button>
+        <Button x:Name="PlayersButton" Command="{Binding PlayerListCommand}" Grid.Column="5" Grid.Row="2" Margin="15" FontSize="20" >Zawodnicy</Button>
+        <Button x:Name="NewPlayerButton" Command="{Binding NewPlayerCommand}" Grid.Column="3" Grid.Row="1" FontSize="15" Height="80" >Nowy</Button>
         <!--<Button x:Name="GetNBA2020Button" Grid.Column="3" Grid.ColumnSpan="3" Margin="38,-49,77,49">Pobierz z NBA</Button>-->
-        <ListBox x:Name="GamesListBox" ItemsSource="{Binding}" Grid.Column="1" Grid.Row="3"/>
+        <!--<ListBox x:Name="GamesListBox" ItemsSource="{Binding}" Grid.Column="1" Grid.Row="3"/>-->
+        <Button x:Name="GamesHistoryButton" Command="{Binding GamesHistoryCommand}" Grid.Column="1" Grid.Row="2" FontSize="20" Margin="15" >Historia</Button>
     </Grid>
 </mah:MetroWindow>

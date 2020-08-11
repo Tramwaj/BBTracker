@@ -17,12 +17,12 @@ namespace BBTracker.Views
     /// <summary>
     /// Interaction logic for GameView.xaml
     /// </summary>
-    public partial class GameView : MetroWindow
+    public partial class CurrentGameView : MetroWindow
     {
-        public GameView()
+        public CurrentGameView()
         {
             InitializeComponent();
-            DataContext = new GameViewModel();
+            DataContext = new CurrentGameViewModel();
         }
     }
 }

@@ -13,9 +13,9 @@ namespace BBTracker.Services
 {
     public class CurrentStatsService
     {
-        public ObservableCollection<PlayerStats> PlayersStatsList { get; private set; }        
+        public ICollection<PlayerStats> PlayersStatsList { get; private set; }        
 
-        public CurrentStatsService(ObservableCollection<PlayerStats> playerStats)
+        public CurrentStatsService(ICollection<PlayerStats> playerStats)
         {
             PlayersStatsList = playerStats;
         }
@@ -100,29 +100,6 @@ namespace BBTracker.Services
         }
 
     }
-    public class PlayerStats : INotifyPropertyChanged
-    {
-        public Player Player { get; set; }
-        public string Name { get; set; }
-        public int Points { get; set; }
-        public int Rebounds { get; set; }
-        public int Assists { get; set; }
-        public int DefensiveRebounds { get; set; }
-        public int OffensiveRebounds { get; set; }
-        public int Steals { get; set; }
-        public int Blocks { get; set; }
-        public int Turnovers { get; set; }
-        public int Attempted2pFG { get; set; }
-        public int Attempted3pFG { get; set; }
-        public int Made2pFG { get; set; }
-        public int Made3pFG { get; set; }
-        public double Percentage2pFG { get => Attempted2pFG > 0 ? (Made2pFG / Attempted2pFG) * 100 : 0; private set { } }
-        public double Percentage3pFG { get => Attempted3pFG > 0 ? (Made3pFG / Attempted3pFG) * 100 : 0; private set { } }
-        public TimeSpan PlayingTime { get ; set; }
-        public int Minutes { get => (int)PlayingTime.TotalMinutes; }
-        public DateTime CheckInTime { get; set; }        
-
-    public event PropertyChangedEventHandler PropertyChanged;
-    }
+    
 }
 

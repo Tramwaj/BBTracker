@@ -7,7 +7,7 @@ using System.Text;
 
 namespace BBTracker.Services
 {
-    public class GamesListService
+    public class NBAGamesListService
     {
         private RestClient _restClient = new RestClient("https://api.sportsdata.io/v3/nba/scores/json/Games");
 

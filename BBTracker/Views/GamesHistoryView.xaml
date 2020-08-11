@@ -1,0 +1,153 @@
+﻿<mah:MetroWindow x:Class="BBTracker.Views.GamesHistoryView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"         
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BBTracker.Views"
+        mc:Ignorable="d"
+        Title="GamesHistoryView" Height="500" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="1.5*"/>
+            <ColumnDefinition Width="2"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="2*"/>
+        </Grid.RowDefinitions>
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1" Grid.Column="0" Margin="10,20,5,5">-->
+        <ListView ItemsSource="{Binding Games}" SelectedItem="{Binding Game, Mode=TwoWay}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Id}" Header="Id" Width="50"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Start}" Header="Start" Width="200"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Duration, StringFormat='{}{0:mm}min {0:ss}s'}" Header="Długość" Width="200"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Grid Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>                
+                <RowDefinition Height="2*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Wynik" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="% trafionych" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="% 3" Grid.Column="3" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Zbiórki" Grid.Column="4" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Drużyna A" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="Drużyna B" Grid.Column="0" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text="{Binding GameStats.TeamAScore}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamBScore}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamAFieldGoalPct, StringFormat='{}{0:#,#.0}%'}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamBFieldGoalPct, StringFormat='{}{0:#,#.0}%'}" Grid.Column="2" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamA3pFieldGoalPct, StringFormat='{}{0:#,#.0}%'}" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamB3pFieldGoalPct, StringFormat='{}{0:#,#.0}%'}" Grid.Column="3" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamARebounds}" Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <TextBlock Text="{Binding GameStats.TeamBRebounds}" Grid.Column="4" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <!--<TextBlock Text="{}"-->
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Zawodnik" Grid.Column="0"/>
+            <TextBlock Text="Punkty" Grid.Column="1"/>
+            <TextBlock Text="Asysty" Grid.Column="2"/>
+            <TextBlock Text="Zbiórki" Grid.Column="3"/>
+            <TextBlock Text="% za 2" Grid.Column="4"/>
+            <TextBlock Text="% za 3" Grid.Column="5"/>
+            <TextBlock Text="EVAL" Grid.Column="6" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
+        </Grid>
+        <Grid Grid.Row="3" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2.2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Zawodnik" Grid.Column="0"/>
+            <TextBlock Text="Punkty" Grid.Column="1"/>
+            <TextBlock Text="Asysty" Grid.Column="2"/>
+            <TextBlock Text="Zbiórki" Grid.Column="3"/>
+            <TextBlock Text="% za 2" Grid.Column="4"/>
+            <TextBlock Text="% za 3" Grid.Column="5"/>
+            <TextBlock Text="EVAL" Grid.Column="6" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
+        </Grid>
+        <ItemsControl ItemsSource="{Binding PlayerStats.TeamAPlayers}" Grid.Column="0" Grid.Row="4">
+            
+            <ItemsControl.ItemTemplate>                
+                <DataTemplate>                    
+                    <Border BorderBrush="OrangeRed" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2.2*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Player.FullName}" Grid.Column="0"/>
+                            <TextBlock Text="{Binding Points}" Grid.Column="1"/>
+                            <TextBlock Text="{Binding Assists}" Grid.Column="2"/>
+                            <TextBlock Text="{Binding Rebounds}" Grid.Column="3"/>
+                            <TextBlock Text="{Binding Percentage2pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="4"/>
+                            <TextBlock Text="{Binding Percentage3pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="5"/>
+                            <TextBlock Text="{Binding Eval}" Grid.Column="6"/>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <ItemsControl ItemsSource="{Binding PlayerStats.TeamBPlayers}" Grid.Column="1" Grid.Row="4">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2.2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Player.FullName}" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Points}" Grid.Column="1"/>
+                        <TextBlock Text="{Binding Assists}" Grid.Column="2"/>
+                        <TextBlock Text="{Binding Rebounds}" Grid.Column="3"/>
+                        <TextBlock Text="{Binding Percentage2pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="4"/>
+                        <TextBlock Text="{Binding Percentage3pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="5"/>
+                        <TextBlock Text="{Binding Eval}" Grid.Column="6"/>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</mah:MetroWindow>
