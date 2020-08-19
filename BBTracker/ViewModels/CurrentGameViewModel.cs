@@ -37,7 +37,8 @@ namespace BBTracker.ViewModels
         public bool PossesionTeamB { get; set; }
         public int TeamSize { get; set; }
         public Play _play { get; set; }
-
+        private PlayFactory _playFactory; 
+        
         public string InfoText { get; set; }
         private BBTrackerContext _context;
 
@@ -57,7 +58,7 @@ namespace BBTracker.ViewModels
             StatsListTeamA = new ObservableCollection<PlayerStats>();
             StatsServiceA = new CurrentStatsService(StatsListTeamA);
             StatsListTeamB = new ObservableCollection<PlayerStats>();
-            StatsServiceB = new CurrentStatsService(StatsListTeamB);
+            StatsServiceB = new CurrentStatsService(StatsListTeamB);            
         }
 
         private void UpdateStatsHandler(object sender, NotifyCollectionChangedEventArgs args)
@@ -126,6 +127,7 @@ namespace BBTracker.ViewModels
         {
             Game = new Game();
             Plays = new ObservableCollection<Play>();
+            _playFactory = new PlayFactory(Game);
 
             Plays.CollectionChanged += UpdateStatsHandler;
 
@@ -184,25 +186,17 @@ namespace BBTracker.ViewModels
         {            
             foreach (Player player in TeamAOnCourt)
             {
-                Plays.Add(new Play
-                {
-                    Player = player,
-                    PlayType = PlayType.CheckIn,
-                    Time = Game.Start,
-                    GameTime = TimeSpan.Zero,
-                    TeamB = false
-                });
+                _playFactory.SelectPlayer(player,false);
+                _playFactory.ChoosePlayType(PlayType.CheckIn);
+                Plays.Add(_playFactory.GetPlays().First());
+                _playFactory.Clear();
             }
             foreach (Player player in TeamBOnCourt)
             {
-                Plays.Add(new Play
-                {
-                    Player = player,
-                    PlayType = PlayType.CheckIn,
-                    Time = Game.Start,
-                    GameTime = Game.Start - Game.Start,
-                    TeamB = true
-                });
+                _playFactory.SelectPlayer(player, true);
+                _playFactory.ChoosePlayType(PlayType.CheckIn);
+                Plays.Add(_playFactory.GetPlays().First());
+                _playFactory.Clear();
             }
         }
 
@@ -210,28 +204,22 @@ namespace BBTracker.ViewModels
         {
             foreach (Player player in TeamAOnCourt)
             {
-                //PlayFac.ChoosePlayer(player,false);
-                Plays.Add(new Play
-                {
-                    Player = player,
-                    PlayType = PlayType.CheckOut,
-                    Time = Game.End,
-                    GameTime = Game.End - Game.Start,
-                    TeamB = false
-                }); ;
+                _playFactory.SelectPlayer(player, false);
+                _playFactory.ChoosePlayType(PlayType.CheckOut);
+                Plays.Add(_playFactory.GetPlays().First());
+                _playFactory.Clear();
             }
             foreach (Player player in TeamBOnCourt)
             {
-                Plays.Add(new Play
-                {
-                    Player = player,
-                    PlayType = PlayType.CheckOut,
-                    Time = Game.End,
-                    GameTime = Game.End - Game.Start,
-                    TeamB = true
-                }); ;
+                _play = NewPlayNow(player, true);
+
+                _playFactory.SelectPlayer(player, true);
+                _playFactory.ChoosePlayType(PlayType.CheckOut);
+                Plays.Add(_playFactory.GetPlays().First());
+                _playFactory.Clear();
             }
         }
+
 
         public ICommand ChoosePlayerCommand { get; set; }
         private void ChoosePlayer(int Id)
@@ -240,13 +228,7 @@ namespace BBTracker.ViewModels
             {
                 SetZeroVisibility();
                 SetDefaultButtonsVisibleOnly();
-                _play = new Play
-                {
-                    Player = Players.First(p => p.Id == Id),
-                    Time = DateTime.Now,
-                    GameTime = DateTime.Now - Game.Start,
-                    TeamB = PossesionTeamB
-                };
+                _play = NewPlayNow(Players.First(p => p.Id == Id), PossesionTeamB);                
                 InfoText = "Wybierz akcję:";
 
             }
@@ -439,6 +421,17 @@ namespace BBTracker.ViewModels
                 GameTime = _play.GameTime,
                 Points = _play.Points != 0 ? _play.Points : 0,
                 TeamB = _sameTeam ? _play.TeamB : !_play.TeamB
+            };
+        }
+
+        private Play NewPlayNow(Player player, bool teamB)
+        {
+            return new Play
+            {
+                Player = player,
+                Time = DateTime.Now,
+                GameTime = DateTime.Now - Game.Start,
+                TeamB = teamB
             };
         }
 
