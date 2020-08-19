@@ -17,10 +17,15 @@ namespace BBTracker.Models
         Steal,
         FreeThrow,
         TurnOver,
-        Foul
+        Foul,
+        Null
     }
     public class Play
     {
+        public Play()
+        {
+            PlayType = PlayType.Null;
+        }
         public int Id { get; set; }
         public DateTime Date { get; set; }
         public DateTime Time { get; set; }
