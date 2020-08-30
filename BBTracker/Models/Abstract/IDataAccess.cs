@@ -12,5 +12,7 @@ namespace BBTracker.Services
         Task<List<Play>> GetPlaysFromGameAsync(int gameId);
         List<Play> GetPlaysFromGame(int gameId);
         List<Play> GetPlayerPlays(int playerId);
+        //void start
+
     }
 }

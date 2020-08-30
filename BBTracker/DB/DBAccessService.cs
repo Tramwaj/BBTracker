@@ -19,7 +19,10 @@ namespace BBTracker.Services
         public async Task<List<Play>> GetPlaysFromGameAsync(int gameId)
         {
             await using var _context = new BBTrackerContext();
-            return await _context.Plays.Where(p => p.Game.Id == gameId).ToListAsync();
+            return await _context.Plays
+                .Include(p=>p.Player)
+                .Where(p => p.Game.Id == gameId)
+                .ToListAsync();
         }
         public List<Play> GetPlaysFromGame(int gameId)
         {
