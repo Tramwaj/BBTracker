@@ -1,6 +1,7 @@
 ﻿using BBTracker.Models;
 using BBTracker.Services;
 using GalaSoft.MvvmLight.Command;
+using Microsoft.Xaml.Behaviors.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -18,21 +19,22 @@ namespace BBTracker.ViewModels
         public ICollection<Play> Plays { get; set; }
         public GameStatsService GameStats { get; set; }
         public PlayersStatsService PlayerStats { get; set; }
-        private IDataAccess Data;
+        private IDataAccess DataAcess;
 
         public GamesHistoryViewModel()
         {
+            DataAcess = new DBAccessService();
             GetGamesAsync();
             //ChooseGameCommand = new RelayCommand<Game>((game) => ChooseGame(game));
             this.PropertyChanged += GamesHistoryViewModel_PropertyChanged;
-            Data = new DBAccessService();
         }
 
-        private void GamesHistoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private async void GamesHistoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Game")
             {
-                GetGamePlays();
+                Plays = await GetGamePlaysAsync();
+
                 GameStats = new GameStatsService(Plays);
                 PlayerStats = new PlayersStatsService(Plays);
             }
@@ -40,13 +42,12 @@ namespace BBTracker.ViewModels
 
         public async void GetGamesAsync()
         {
-            Games = await Data.GetAllGamesAsync();
+            Games = await DataAcess.GetAllGamesAsync();
         }
-
         
-        private void GetGamePlays()
+        private async Task<ICollection<Play>> GetGamePlaysAsync()
         {
-            Plays = Data.GetPlaysFromGame(Game.Id);
+            return await DataAcess.GetPlaysFromGameAsync(Game.Id);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
