@@ -29,5 +29,14 @@ namespace BBTracker.Services
                 .Where(p => p.Game.Id == gameId)                
                 .ToList();
         }
+
+        public List<Play> GetPlayerPlays(int playerId)
+        {
+            using var _context = new BBTrackerContext();
+            return _context.Plays
+                .Include(p => p.Game)
+                .Where(p => p.Player.Id == playerId)
+                .ToList();
+        }
     }
 }
