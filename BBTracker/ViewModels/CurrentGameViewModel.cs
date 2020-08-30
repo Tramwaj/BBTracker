@@ -40,25 +40,32 @@ namespace BBTracker.ViewModels
         private PlayFactory _playFactory; 
         
         public string InfoText { get; set; }
-        private BBTrackerContext _context;
+        private IDataAccess _dataAccess;
 
         public ObservableCollection<PlayerStats> StatsListTeamA { get; set; }
         public CurrentStatsService StatsServiceA;
         public ObservableCollection<PlayerStats> StatsListTeamB { get; set; }
         public CurrentStatsService StatsServiceB;
 
-        public CurrentGameViewModel()
+        public CurrentGameViewModel(IDataAccess dataAccess)
         {
-            Players = GetPlayers();
+            _dataAccess = dataAccess;
+            InitializeViewModel();                
+        }
+
+        private async void InitializeViewModel()
+        {
+            _dataAccess.OpenConnection();
+            Players = await _dataAccess.GetPlayersAsyncAlreadyConnected();
             InitializeCommands();
             CrudeTeamSettings();
             //SetDefaultButtonsVisible();
             SetZeroVisibility();
-            GameNotStarted = true;            
+            GameNotStarted = true;
             StatsListTeamA = new ObservableCollection<PlayerStats>();
             StatsServiceA = new CurrentStatsService(StatsListTeamA);
             StatsListTeamB = new ObservableCollection<PlayerStats>();
-            StatsServiceB = new CurrentStatsService(StatsListTeamB);            
+            StatsServiceB = new CurrentStatsService(StatsListTeamB);
         }
 
         private void UpdateStatsHandler(object sender, NotifyCollectionChangedEventArgs args)
@@ -89,13 +96,7 @@ namespace BBTracker.ViewModels
             TeamBOnCourt = new ObservableCollection<Player>(TeamB.Take(3).ToList());
             TeamABench = new ObservableCollection<Player>(TeamA.TakeLast(1).ToList());
             TeamBBench = new ObservableCollection<Player>(TeamB.TakeLast(1).ToList());
-        }
-
-        private List<Player> GetPlayers()
-        {
-            _context = new BBTrackerContext();
-            return _context.Players.ToList();
-        }
+        }        
 
         private void InitializeCommands()
         {
@@ -110,6 +111,7 @@ namespace BBTracker.ViewModels
             FieldGoalOutcomeCommand = new RelayCommand<string>((outcome) => FieldGoalOutcome(outcome));
             NoReboundCommand = new RelayCommand(NoRebound);
             NoStealCommand = new RelayCommand(NoSteal);
+            CloseWindowCommand = new RelayCommand(CloseWindow);
         }
 
         public ICommand SwitchPossesionCommand { get; private set; }
@@ -172,12 +174,14 @@ namespace BBTracker.ViewModels
             Game.Plays = Plays;
             Game.PlayerGames = PlayerGames;
 
-            _context.Games.Add(Game);
-            _context.Plays.AddRange(Plays);
-
-            _context.PlayerGames.AddRange(PlayerGames);
-
-            _context.SaveChanges();
+            _dataAccess.AddGameAsync(Game);
+            //_context.Games.Add(Game);
+            _dataAccess.AddPlaysAsync(Plays);
+            //_context.Plays.AddRange(Plays);
+            _dataAccess.AddPlayerGames(PlayerGames);
+            //_context.PlayerGames.AddRange(PlayerGames);
+            _dataAccess.SaveChangesAsync();
+            //_context.SaveChanges();
             GameNotStarted = true;
             GameStarted = false;
         }
@@ -237,6 +241,7 @@ namespace BBTracker.ViewModels
                 _play.Player = Players.First(p => p.Id == Id);
                 if (_play.PlayType == PlayType.Rebound)
                 {
+                    _play.OffensiveRebound = true;
                     if (PossesionTeamB ^ (TeamB.Contains(_play.Player)))
                     {
                         _play.OffensiveRebound = false;
@@ -433,6 +438,12 @@ namespace BBTracker.ViewModels
                 GameTime = DateTime.Now - Game.Start,
                 TeamB = teamB
             };
+        }
+
+        public ICommand CloseWindowCommand { get; private set; }
+        private void CloseWindow()
+        {
+            _dataAccess.CloseConnectionAsync();
         }
 
         private void SetPlayersVisibility(bool otherTeam = false)

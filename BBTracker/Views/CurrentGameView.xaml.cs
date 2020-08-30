@@ -1,4 +1,5 @@
-﻿using BBTracker.ViewModels;
+﻿using BBTracker.Services;
+using BBTracker.ViewModels;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,10 @@ namespace BBTracker.Views
     /// </summary>
     public partial class CurrentGameView : MetroWindow
     {
-        public CurrentGameView()
+        public CurrentGameView(IDataAccess dataAccess)
         {
             InitializeComponent();
-            DataContext = new CurrentGameViewModel();
+            DataContext = new CurrentGameViewModel(dataAccess);
         }
     }
 }
