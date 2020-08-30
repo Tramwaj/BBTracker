@@ -1,33 +1,54 @@
-﻿using BBTracker.Views;
+﻿using BBTracker.Services;
+using BBTracker.Views;
 using GalaSoft.MvvmLight.Command;
+using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 
 namespace BBTracker.ViewModels
 {
     class MainWindowViewModel
     {
+        private IDataAccess dataAccess; 
         public MainWindowViewModel()
         {
             GamesHistoryCommand = new RelayCommand(GamesHistory);
             NewGameCommand = new RelayCommand(NewGame);
             PlayerListCommand = new RelayCommand(PlayerList);
             NewPlayerCommand = new RelayCommand(NewPlayer);
+            AskForDemoMessageBox();
+        }
+
+        private void AskForDemoMessageBox()
+        {
+            string msgText = "Czy chcesz uruchomić wersję demonstracyjną?";
+            string title = "Wersja demo?";
+            MessageBoxButton button = MessageBoxButton.YesNo;
+            MessageBoxResult result = MessageBox.Show(msgText, title, button);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    break;
+                case MessageBoxResult.No:
+                    dataAccess = new DBAccessService();
+                    break;
+            }
         }
 
         public ICommand GamesHistoryCommand { get; set; }
         private void GamesHistory()
         {
-            GamesHistoryView historyView = new GamesHistoryView();
+            GamesHistoryView historyView = new GamesHistoryView(dataAccess);
             historyView.Show();
         }
 
         public ICommand NewGameCommand { get; private set; }
         private void NewGame()
         {
-            CurrentGameView gameview = new CurrentGameView();
+            CurrentGameView gameview = new CurrentGameView(dataAccess);
             gameview.Show();
         }
 

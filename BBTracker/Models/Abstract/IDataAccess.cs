@@ -1,4 +1,5 @@
 ﻿using BBTracker.Models;
+using Microsoft.Xaml.Behaviors.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -10,9 +11,15 @@ namespace BBTracker.Services
     {
         Task<List<Game>> GetAllGamesAsync();
         Task<List<Play>> GetPlaysFromGameAsync(int gameId);
-        List<Play> GetPlaysFromGame(int gameId);
-        List<Play> GetPlayerPlays(int playerId);
-        //void start
+        //List<Play> GetPlaysFromGame(int gameId);
+        Task<List<Play>> GetPlayerPlaysAsync(int playerId);
 
+        void OpenConnection();
+        void CloseConnectionAsync();
+        void AddGameAsync(Game game);
+        void AddPlaysAsync(ICollection<Play> plays);
+        void AddPlayerGames(ICollection<PlayerGame> playerGames);
+        void SaveChangesAsync();
+        Task<List<Player>> GetPlayersAsyncAlreadyConnected();
     }
 }

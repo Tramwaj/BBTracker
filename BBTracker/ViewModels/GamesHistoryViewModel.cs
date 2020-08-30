@@ -19,11 +19,11 @@ namespace BBTracker.ViewModels
         public ICollection<Play> Plays { get; set; }
         public GameStatsService GameStats { get; set; }
         public PlayersStatsService PlayerStats { get; set; }
-        private IDataAccess DataAcess;
+        private IDataAccess DataAccess;
 
-        public GamesHistoryViewModel()
+        public GamesHistoryViewModel(IDataAccess dataAccess)
         {
-            DataAcess = new DBAccessService();
+            DataAccess = dataAccess;
             GetGamesAsync();
             //ChooseGameCommand = new RelayCommand<Game>((game) => ChooseGame(game));
             this.PropertyChanged += GamesHistoryViewModel_PropertyChanged;
@@ -42,12 +42,12 @@ namespace BBTracker.ViewModels
 
         public async void GetGamesAsync()
         {
-            Games = await DataAcess.GetAllGamesAsync();
+            Games = await DataAccess.GetAllGamesAsync();
         }
         
         private async Task<ICollection<Play>> GetGamePlaysAsync()
         {
-            return await DataAcess.GetPlaysFromGameAsync(Game.Id);
+            return await DataAccess.GetPlaysFromGameAsync(Game.Id);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

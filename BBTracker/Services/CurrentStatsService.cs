@@ -34,6 +34,11 @@ namespace BBTracker.Services
             }
             var _player = PlayersStatsList.First(p => p.Player == play.Player);
 
+            void AddFieldGoal(int numberOfPoints)
+            {
+                
+            }
+
             switch (play.PlayType)
             {
                 case PlayType.Assist:

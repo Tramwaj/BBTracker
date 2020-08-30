@@ -1,4 +1,5 @@
-﻿using BBTracker.ViewModels;
+﻿using BBTracker.Services;
+using BBTracker.ViewModels;
 using MahApps.Metro.Controls;
 using System;
 using System.Collections.Generic;
@@ -19,10 +20,10 @@ namespace BBTracker.Views
     /// </summary>
     public partial class GamesHistoryView : MetroWindow
     {
-        public GamesHistoryView()
+        public GamesHistoryView(IDataAccess dataAccess)
         {
             InitializeComponent();
-            DataContext = new GamesHistoryViewModel();
+            DataContext = new GamesHistoryViewModel(dataAccess);
         }
     }
 }
