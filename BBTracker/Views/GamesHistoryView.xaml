@@ -67,17 +67,19 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Zawodnik" Grid.Column="0"/>
             <TextBlock Text="Punkty" Grid.Column="1"/>
             <TextBlock Text="Asysty" Grid.Column="2"/>
             <TextBlock Text="Zbiórki" Grid.Column="3"/>
-            <TextBlock Text="% za 2" Grid.Column="4"/>
-            <TextBlock Text="% za 3" Grid.Column="5"/>
-            <TextBlock Text="EVAL" Grid.Column="6" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
+            <TextBlock Text="rzuty za 2" Grid.Column="4" Grid.ColumnSpan="2"/>
+            <TextBlock Text="rzuty za 3" Grid.Column="6" Grid.ColumnSpan="2"/>
+            <TextBlock Text="EVAL" Grid.Column="8" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
         </Grid>
         <Grid Grid.Row="3" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -85,17 +87,19 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
+                <ColumnDefinition Width="0.7*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="Zawodnik" Grid.Column="0"/>
             <TextBlock Text="Punkty" Grid.Column="1"/>
             <TextBlock Text="Asysty" Grid.Column="2"/>
             <TextBlock Text="Zbiórki" Grid.Column="3"/>
-            <TextBlock Text="% za 2" Grid.Column="4"/>
-            <TextBlock Text="% za 3" Grid.Column="5"/>
-            <TextBlock Text="EVAL" Grid.Column="6" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
+            <TextBlock Text="rzuty za 2" Grid.Column="4" Grid.ColumnSpan="2"/>
+            <TextBlock Text="rzuty za 3" Grid.Column="6" Grid.ColumnSpan="2"/>
+            <TextBlock Text="EVAL" Grid.Column="8" ToolTip="Punkty + Zbiórki + Asysty + Przechwyty + Bloki - Nietrafione rzuty - Straty"/>
         </Grid>
         <ItemsControl ItemsSource="{Binding PlayerStats.TeamAPlayers}" Grid.Column="0" Grid.Row="4">
             
@@ -108,17 +112,21 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="0.7*"/>
+                                <ColumnDefinition Width="0.7*"/>
+                                <ColumnDefinition Width="0.7*"/>
+                                <ColumnDefinition Width="0.7*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="{Binding Player.FullName}" Grid.Column="0"/>
                             <TextBlock Text="{Binding Points}" Grid.Column="1"/>
                             <TextBlock Text="{Binding Assists}" Grid.Column="2"/>
                             <TextBlock Text="{Binding Rebounds}" Grid.Column="3"/>
-                            <TextBlock Text="{Binding Percentage2pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="4"/>
-                            <TextBlock Text="{Binding Percentage3pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="5"/>
-                            <TextBlock Text="{Binding Eval}" Grid.Column="6"/>
+                            <TextBlock Text="{Binding Made2pFG, StringFormat='{}{0} / '}" Grid.Column="4" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding Attempted2pFG, StringFormat='{}{0}'}" Grid.Column="5" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding Made3pFG, StringFormat='{}{0} / '}" Grid.Column="6" HorizontalAlignment="Right"/>
+                            <TextBlock Text="{Binding Attempted3pFG, StringFormat='{}{0}'}" Grid.Column="7" HorizontalAlignment="Left"/>
+                            <TextBlock Text="{Binding Eval}" Grid.Column="8"/>
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -134,17 +142,21 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.7*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Player.FullName}" Grid.Column="0"/>
                         <TextBlock Text="{Binding Points}" Grid.Column="1"/>
                         <TextBlock Text="{Binding Assists}" Grid.Column="2"/>
                         <TextBlock Text="{Binding Rebounds}" Grid.Column="3"/>
-                        <TextBlock Text="{Binding Percentage2pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="4"/>
-                        <TextBlock Text="{Binding Percentage3pFG, StringFormat='{}{0:#,#.0}%'}" Grid.Column="5"/>
-                        <TextBlock Text="{Binding Eval}" Grid.Column="6"/>
+                        <TextBlock Text="{Binding Made2pFG, StringFormat='{}{0} / '}" Grid.Column="4" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding Attempted2pFG, StringFormat='{}{0}'}" Grid.Column="5" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding Made3pFG, StringFormat='{}{0} / '}" Grid.Column="6" HorizontalAlignment="Right"/>
+                        <TextBlock Text="{Binding Attempted3pFG, StringFormat='{}{0}'}" Grid.Column="7" HorizontalAlignment="Left"/>
+                        <TextBlock Text="{Binding Eval}" Grid.Column="8"/>
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
