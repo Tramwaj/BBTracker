@@ -10,7 +10,7 @@
         Title="GameView" Height="660" Width="880">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding CloseWindowCommand}"/>
+            <i:InvokeCommandAction Command="{Binding CloseCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Grid Margin="15" >
@@ -99,12 +99,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="4*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Button x:Name="CancelAction" Content="Anuluj" Grid.Column="0" Grid.ColumnSpan="6" Grid.Row="1"
-                    Command="{Binding CancelActionCommand}"/>
             <Button x:Name="FieldGoalButton" Content="Rzut" Grid.Column="0" Grid.ColumnSpan="2"
                 IsEnabled="{Binding DefaultButtonsActive}"
                 Visibility="{Binding DefaultButtonsVisibility}"

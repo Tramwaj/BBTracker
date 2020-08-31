@@ -174,18 +174,16 @@ namespace BBTracker.ViewModels
             Game.Plays = Plays;
             Game.PlayerGames = PlayerGames;
 
-            _dataAccess.AddGameAsync(Game);            
+            _dataAccess.AddGameAsync(Game);
+            //_context.Games.Add(Game);
             _dataAccess.AddPlaysAsync(Plays);
+            //_context.Plays.AddRange(Plays);
             _dataAccess.AddPlayerGames(PlayerGames);
+            //_context.PlayerGames.AddRange(PlayerGames);
             _dataAccess.SaveChangesAsync();
-
+            //_context.SaveChanges();
             GameNotStarted = true;
             GameStarted = false;
-        }
-
-        private void SaveGameInfo()
-        {
-
         }
 
         private void CheckInPlayers()
