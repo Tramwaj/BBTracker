@@ -1,4 +1,5 @@
-﻿using BBTracker.Services;
+﻿using BBTracker.DB;
+using BBTracker.Services;
 using BBTracker.Views;
 using GalaSoft.MvvmLight.Command;
 using MahApps.Metro.Controls.Dialogs;
@@ -31,6 +32,7 @@ namespace BBTracker.ViewModels
             switch (result)
             {
                 case MessageBoxResult.Yes:
+                    dataAccess = new Serializer();
                     break;
                 case MessageBoxResult.No:
                     dataAccess = new DBAccessService();

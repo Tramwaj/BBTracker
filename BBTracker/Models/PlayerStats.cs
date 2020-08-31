@@ -22,6 +22,7 @@ namespace BBTracker.Models
         public int Attempted3pFG { get; set; }
         public int Made2pFG { get; set; }
         public int Made3pFG { get; set; }
+        public int Fouls { get; set; }
         public TimeSpan PlayingTime { get; set; }
         public int Minutes { get => (int)PlayingTime.TotalMinutes; }
         public DateTime CheckInTime { get; set; }
@@ -31,6 +32,9 @@ namespace BBTracker.Models
         public int MissedFG { get => Attempted2pFG - Made2pFG + Attempted3pFG - Made3pFG; }
 
         public double Eval { get => Points + Rebounds + Assists + Steals + Blocks - MissedFG - Turnovers; }
+
+        public double PlusMinusTotal { get; set; }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
     }

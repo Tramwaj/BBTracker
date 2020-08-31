@@ -6,6 +6,7 @@ using System.Text;
 
 namespace BBTracker.Models
 {
+    [Serializable]
     public class PlayerGame
     {              
         public int PlayerId { get; set; }

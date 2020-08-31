@@ -20,6 +20,7 @@ namespace BBTracker.Models
         Foul,
         Null
     }
+    [Serializable]
     public class Play
     {
         public Play()
@@ -62,5 +63,23 @@ namespace BBTracker.Models
         public virtual Player? TurnoverCauser { get; set; }
 
         //public event PropertyChangedEventHandler PropertyChanged;
+        //public Play()
+        //{
+        //    Time = DateTime.Now;
+        //    PlayType = PlayType.Null;
+        //    asdassfa //niekompletne
+        //}
+        //public Play(Player player, bool TeamB)
+        //{
+
+        //}
+        //public Play GetResultingPlay(PlayType playType)
+        //{
+        //    Play _play = new Play();
+        //    _play.PlayType = playType;
+        //    return _play;
+        //    ????
+        //}
+        
     }
 }
