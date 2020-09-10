@@ -33,35 +33,59 @@ namespace BBTracker.Models
             _play.Game = _game;
         }
 
-        public void ConsecutivePlay(Player player, bool teamB)
+        public void ConsecutivePlay(Player player)
         {
+            if (_plays.Count == 0)
+            {
+                throw new InvalidOperationException();
+            }
             _play.Player = player;
-            _play.TeamB = teamB;
-            UpdateAdditionalFields(player);            
+            UpdateAdditionalFields(player);
             _plays.Add(_play);
         }
+
+        public void ConsecutivePlay(Player player, bool TeamB)
+        {
+            if (_play.PlayType != PlayType.Rebound)
+            {
+                ConsecutivePlay(player);
+            }
+            else
+            {
+                _play.Player = player;
+                _play.TeamB = TeamB;
+                _play.OffensiveRebound = _play.TeamB == _plays.Last().TeamB;
+                _plays.Add(_play);
+            }
+        }
+
         private void UpdateAdditionalFields(Player player)
         {
             switch (_play.PlayType)
-            {     
+            {
                 case PlayType.Assist:
                     _plays.Last().Assister = player;
                     _play.AssistedPlayer = _plays.Last().Player;
-                    break;               
+                    _play.TeamB = _plays.Last().TeamB;
+                    break;
                 case PlayType.Block:
                     _plays.Last().Blocker = player;
                     _play.BlockedPlayer = _plays.Last().Player;
+                    _play.TeamB = !_plays.Last().TeamB;
                     break;
                 case PlayType.Steal:
                     _plays.Last().TurnoverCauser = player;
                     _play.StolenFrom = _plays.Last().Player;
-                    break;                
+                    _play.TeamB = !_plays.Last().TeamB;
+                    break;
                 case PlayType.Foul:
                     _plays.Last().Fouler = player;
                     _play.FouledPlayer = _plays.Last().Player;
+                    _play.TeamB = !_plays.Last().TeamB;
                     break;
                 case PlayType.Rebound:
-                    _play.OffensiveRebound = _play.TeamB == _plays.Last().TeamB ? true : false;
+                    _play.OffensiveRebound = _play.TeamB == _plays.Last().TeamB;
+                    throw new InvalidOperationException();
                     break;
             }
         }
@@ -120,19 +144,19 @@ namespace BBTracker.Models
                 throw new InvalidOperationException("Play is not a Field goal");
             switch (result)
             {
-                case "make":
+                case "Make":
                     _play.MadeFG = true;
                     _plays.Add(_play);
                     _play = CopyPlay();
                     _play.PlayType = PlayType.Assist;
                     break;
-                case "miss":
+                case "Miss":
                     _play.MadeFG = false;
                     _plays.Add(_play);
                     _play = CopyPlay();
                     _play.PlayType = PlayType.Rebound;
                     break;
-                case "block":
+                case "Block":
                     _play.MadeFG = false;
                     _play.BlockedFG = true;
                     _plays.Add(_play);
@@ -142,15 +166,15 @@ namespace BBTracker.Models
             }
         }
 
-        public void SelectPoints(int points)
+        public void SelectPoints(string points)
         {
-            _play.Points = points;
+            _play.Points = Int32.Parse(points);
         }
 
         // public void ChoosePlaytype(PlayType playType)
         public ICollection<Play> GetPlays() //Flush()??
         {
             return _plays;
-        }        
+        }
     }
 }

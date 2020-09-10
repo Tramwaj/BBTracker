@@ -37,8 +37,8 @@ namespace BBTracker.ViewModels
         public bool PossesionTeamB { get; set; }
         public int TeamSize { get; set; }
         private Play _play;
-        private PlayCreator _playFactory; 
-        
+        private PlayCreator _playFactory;
+
         public string InfoText { get; set; }
         private IDataAccess _dataAccess;
 
@@ -49,7 +49,7 @@ namespace BBTracker.ViewModels
         public CurrentGameViewModel(IDataAccess dataAccess)
         {
             _dataAccess = dataAccess;
-            InitializeViewModel();                
+            InitializeViewModel();
         }
 
         private async void InitializeViewModel()
@@ -63,14 +63,14 @@ namespace BBTracker.ViewModels
             GameNotStarted = true;
             StatsListTeamA = new ObservableCollection<PlayerStatsCurrentGame>();
             StatsListTeamB = new ObservableCollection<PlayerStatsCurrentGame>();
-            Stats = new CurrentStatsService(StatsListTeamA, StatsListTeamB);            
+            Stats = new CurrentStatsService(StatsListTeamA, StatsListTeamB);
         }
 
         private void UpdateStatsHandler(object sender, NotifyCollectionChangedEventArgs args)
         {
             foreach (var play in args.NewItems)
-            {                
-                    Stats.AddPlay(play as Play);
+            {
+                Stats.AddPlay(play as Play);
             }
             //StatsService.AddPlays(new List<Play>(args.NewItems));
         }
@@ -87,7 +87,7 @@ namespace BBTracker.ViewModels
             TeamBOnCourt = new ObservableCollection<Player>(TeamB.Take(3).ToList());
             TeamABench = new ObservableCollection<Player>(TeamA.TakeLast(1).ToList());
             TeamBBench = new ObservableCollection<Player>(TeamB.TakeLast(1).ToList());
-        }        
+        }
 
         private void InitializeCommands()
         {
@@ -131,7 +131,7 @@ namespace BBTracker.ViewModels
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
             GameNotStarted = false;
-            GameStarted = true;            
+            GameStarted = true;
         }
 
         private void AddPlayerGames()
@@ -165,21 +165,23 @@ namespace BBTracker.ViewModels
             CheckOutPlayers();
             Game.Plays = Plays;
             Game.PlayerGames = PlayerGames;
+            Game.ScoreB = Plays.Where(p => p.TeamB && p.MadeFG).Sum(p => p.Points);
+            Game.ScoreA = Plays.Where(p => !p.TeamB && p.MadeFG).Sum(p => p.Points);
 
-            _dataAccess.AddGameAsync(Game);            
+            _dataAccess.AddGameAsync(Game);
             _dataAccess.AddPlaysAsync(Plays);
             _dataAccess.AddPlayerGames(PlayerGames);
             _dataAccess.SaveChangesAsync();
 
             GameNotStarted = true;
             GameStarted = false;
-        }        
+        }
 
         private void CheckInPlayers()
-        {            
+        {
             foreach (Player player in TeamAOnCourt)
             {
-                _playFactory.NewPlay(player,false);
+                _playFactory.NewPlay(player, false);
                 _playFactory.ChoosePlayType(PlayType.CheckIn);
                 Plays.Add(_playFactory.GetPlays().First());
                 _playFactory.Clear();
@@ -204,8 +206,6 @@ namespace BBTracker.ViewModels
             }
             foreach (Player player in TeamBOnCourt)
             {
-                _play = NewPlayNow(player, true);
-
                 _playFactory.NewPlay(player, true);
                 _playFactory.ChoosePlayType(PlayType.CheckOut);
                 Plays.Add(_playFactory.GetPlays().First());
@@ -225,44 +225,58 @@ namespace BBTracker.ViewModels
         public ICommand ChoosePlayerCommand { get; set; }
         private void ChoosePlayer(int Id)
         {
-            if (_play is null)// || _play.PlayType is null)
+            var _player = Players.First(p => p.Id == Id);
+            if (!_playFactory.HasPlay)
             {
                 SetZeroVisibility();
                 SetDefaultButtonsVisibleOnly();
-                _play = NewPlayNow(Players.First(p => p.Id == Id), PossesionTeamB);                
+                //_play = NewPlayNow(Players.First(p => p.Id == Id), PossesionTeamB);
+                _playFactory.NewPlay(_player, PossesionTeamB);
                 InfoText = "Wybierz akcję:";
 
             }
             else
             {
-                _play.Player = Players.First(p => p.Id == Id);
-                if (_play.PlayType == PlayType.Rebound)
+                //_play.Player = Players.First(p => p.Id == Id);
+                _playFactory.ConsecutivePlay(_player, TeamB.Contains(_player));
+                foreach (var play in _playFactory.GetPlays())
                 {
-                    _play.OffensiveRebound = true;
-                    if (PossesionTeamB ^ (TeamB.Contains(_play.Player)))
-                    {
-                        _play.OffensiveRebound = false;
-                        _play.TeamB = !_play.TeamB;
-                        SwitchPossession();
-                    }
-                }
-                if (_play.PlayType == PlayType.CheckIn)
-                {
-                    if (TeamABench.Contains(_play.Player))
-                    {
-                        TeamABench.Remove(_play.Player);
-                        TeamAOnCourt.Add(_play.Player);
-                    }
-                    if (TeamBBench.Contains(_play.Player))
-                    {
-                        TeamBBench.Remove(_play.Player);
-                        TeamBOnCourt.Add(_play.Player);
-                    }
+                    Plays.Add(play);
 
-                }
-                _play.TeamB = TeamB.Contains(_play.Player);
-                Plays.Add(_play);
-                _play = null;
+                    if (play.PlayType == PlayType.CheckIn)
+                    {
+                        if (TeamABench.Contains(play.Player))
+                        {
+                            TeamABench.Remove(play.Player);
+                            TeamAOnCourt.Add(play.Player);
+                        }
+                        if (TeamBBench.Contains(play.Player))
+                        {
+                            TeamBBench.Remove(play.Player);
+                            TeamBOnCourt.Add(play.Player);
+                        }
+
+                    }
+                    if (play.PlayType == PlayType.CheckOut)
+                    {
+                        if (TeamAOnCourt.Contains(play.Player))
+                        {
+                            TeamAOnCourt.Remove(play.Player);
+                            TeamABench.Add(play.Player);
+                        }
+                        if (TeamBOnCourt.Contains(play.Player))
+                        {
+                            TeamBOnCourt.Remove(play.Player);
+                            TeamBBench.Add(play.Player);
+                        }
+                    }
+                };
+
+                if (Plays.Last().PlayType == PlayType.Rebound)
+                    PossesionTeamB = Plays.Last().TeamB;
+                _playFactory.Clear();
+
+                //switch possesion dla zbiorki nieofensywnej
                 InfoText = "Wybierz zawodnika";
                 SetDefaultButtonsVisibleOnly();
                 SetPlayersVisibility();
@@ -278,39 +292,20 @@ namespace BBTracker.ViewModels
             switch (choice)
             {
                 case "FieldGoal":
-                    _play.PlayType = PlayType.FieldGoal;
+                    _playFactory.ChoosePlayType(PlayType.FieldGoal);
                     ChoosePointsVisibility = Visibility.Visible;
                     InfoText = "Za ile punktów rzut?";
                     break;
                 case "Turnover":
-                    _play.PlayType = PlayType.TurnOver;
-                    Plays.Add(_play);
-                    _play = NewPlayFrom(_play, PlayType.Steal, false);
+                    _playFactory.ChoosePlayType(PlayType.TurnOver);
                     SwitchPossession();
-                    ChooseTurnoverCauserVisibility = Visibility.Visible;                    
+                    ChooseTurnoverCauserVisibility = Visibility.Visible;
                     SetPlayersVisibility(false);
                     InfoText = "Czy ktoś przejął piłkę?";
                     break;
                 case "Substitution":
-                    _play.PlayType = PlayType.CheckOut;
-                    Plays.Add(_play);
-                    if (TeamAOnCourt.Contains(_play.Player))
-                    {
-                        TeamAOnCourt.Remove(_play.Player);
-                        TeamABench.Add(_play.Player);
-                    }
-                    if (TeamBOnCourt.Contains(_play.Player))
-                    {
-                        TeamBOnCourt.Remove(_play.Player);
-                        TeamBBench.Add(_play.Player);
-                    }
-                    _play = new Play
-                    {
-                        PlayType = PlayType.CheckIn,
-                        Time = _play.Time,
-                        GameTime = _play.GameTime,
-                        TeamB = _play.TeamB
-                    };
+                    _playFactory.ChoosePlayType(PlayType.CheckOut);
+
                     SetBenchPlayersVisibility();
                     InfoText = "Za kogo zmiana?";
                     break;
@@ -321,7 +316,8 @@ namespace BBTracker.ViewModels
         public ICommand ChoosePointsCommand { get; set; }
         private void ChoosePoints(string points)
         {
-            _play.Points = Int32.Parse(points);
+            _playFactory.SelectPoints(points);
+
             ChoosePointsVisibility = Visibility.Collapsed;
             ChooseFieldGoalOutcomeVisibility = Visibility.Visible;
             InfoText = "Jaki wynik rzutu?";
@@ -331,15 +327,16 @@ namespace BBTracker.ViewModels
         private void FieldGoalOutcome(string outcome)
         {
             ChooseFieldGoalOutcomeVisibility = Visibility.Collapsed;
+            _playFactory.FGResult(outcome);
             switch (outcome)
             {
-                case "Made":
+                case "Make":
                     MadeFieldGoal();
                     break;
-                case "Missed":
+                case "Miss":
                     MissedFieldGoal();
                     break;
-                case "Blocked":
+                case "Block":
                     BlockedFieldGoal();
                     break;
             }
@@ -347,29 +344,21 @@ namespace BBTracker.ViewModels
 
         private void MadeFieldGoal()
         {
-            _play.MadeFG = true;
-            Plays.Add(_play);
-            _play = NewPlayFrom(_play, PlayType.Assist, true);
-
-            if (_play.TeamB)
-            {
-                Game.ScoreB += _play.Points;
-            }
-            else
-            {
-                Game.ScoreA += _play.Points;
-            }
-
             SwitchPossession();
             ChooseAssisterVisibility = Visibility.Visible;
-            SetPlayersVisibility(true); //possesion changed, so to look for a player from the same team - we have to set 'otherteam' = true
+            SetPlayersVisibility(true); //possesion changed, so to look for a player from the same team - we have to set 'otherteam' to true
             InfoText = "Kto asystował?";
+        }
+        private void FlushPlay()
+        {
+            Plays.Add(_playFactory.GetPlays().Last());
+            _playFactory.Clear();
         }
 
         public ICommand NoAssistCommand { get; set; }
         private void NoAssist()
         {
-            _play = null;
+            FlushPlay();
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
             InfoText = "Wybierz zawodnika";
@@ -378,7 +367,7 @@ namespace BBTracker.ViewModels
         public ICommand NoStealCommand { get; set; }
         private void NoSteal()
         {
-            _play = null;
+            FlushPlay();
             SetDefaultButtonsVisibleOnly();
             SetPlayersVisibility();
             InfoText = "Wybierz zawodnika";
@@ -386,10 +375,6 @@ namespace BBTracker.ViewModels
 
         private void MissedFieldGoal()
         {
-            _play.MadeFG = false;
-            Plays.Add(_play);
-            _play = NewPlayFrom(_play, PlayType.Rebound, false);
-
             InfoText = "Kto zebrał?";
             ChooseRebounderVisibility = Visibility.Visible;
             SetAllPlayersVisibility();
@@ -398,7 +383,7 @@ namespace BBTracker.ViewModels
         public ICommand NoReboundCommand { get; set; }
         private void NoRebound()
         {
-            _play = null;
+            FlushPlay();
             SwitchPossession();
             SetDefaultButtonsVisibleOnly();
             InfoText = "Wybierz zawodnika";
@@ -406,10 +391,6 @@ namespace BBTracker.ViewModels
 
         private void BlockedFieldGoal()
         {
-            _play.MadeFG = false;
-            Plays.Add(_play);
-            _play = NewPlayFrom(_play, PlayType.Block, false);
-
             InfoText = "Kto zablokował rzut?";
             SetPlayersVisibility(true);
         }
@@ -460,7 +441,7 @@ namespace BBTracker.ViewModels
             //TeamBPlayersActive = true;
             DefaultButtonsActive = false;
             TeamBBenchActive = false;
-            TeamBBenchActive = false;            
+            TeamBBenchActive = false;
         }
 
         private void SetAllPlayersVisibility()

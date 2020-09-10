@@ -43,8 +43,8 @@ namespace BBTracker.Tests
         {
             _playFactory.NewPlay(_playerA, true);
             _playFactory.ChoosePlayType(PlayType.FieldGoal);
-            _playFactory.SelectPoints(3);
-            _playFactory.FGResult("make");
+            _playFactory.SelectPoints("3");
+            _playFactory.FGResult("Make");
             Assert.Multiple(() =>
             {
                 var _plays = _playFactory.GetPlays();
@@ -60,8 +60,8 @@ namespace BBTracker.Tests
         {
             _playFactory.NewPlay(_playerA, true);
             _playFactory.ChoosePlayType(PlayType.FieldGoal);
-            _playFactory.SelectPoints(2);
-            _playFactory.FGResult("make");
+            _playFactory.SelectPoints("2");
+            _playFactory.FGResult("Make");
             _playFactory.ConsecutivePlay(_playerB, true);
             Assert.Multiple(() =>
             {
@@ -79,8 +79,8 @@ namespace BBTracker.Tests
         {
             _playFactory.NewPlay(_playerA, true);
             _playFactory.ChoosePlayType(PlayType.FieldGoal);
-            _playFactory.SelectPoints(2);
-            _playFactory.FGResult("miss");
+            _playFactory.SelectPoints("2");
+            _playFactory.FGResult("Miss");
             _playFactory.ConsecutivePlay(_playerB, true);
             Assert.Multiple(() =>
             {
@@ -94,13 +94,14 @@ namespace BBTracker.Tests
                 Assert.AreEqual(true, _plays.Last().OffensiveRebound);
             });
         }
+        [Test]
         public void FieldGoal_with_Block()
         {
             _playFactory.NewPlay(_playerA, true);
             _playFactory.ChoosePlayType(PlayType.FieldGoal);
-            _playFactory.SelectPoints(2);
-            _playFactory.FGResult("block");
-            _playFactory.NewPlay(_playerB, true);
+            _playFactory.SelectPoints("3");
+            _playFactory.FGResult("Block");
+            _playFactory.ConsecutivePlay(_playerB, true);
             Assert.Multiple(() =>
             {
                 var _plays = _playFactory.GetPlays();
@@ -109,7 +110,7 @@ namespace BBTracker.Tests
                 Assert.AreEqual(_playerA, _plays.First().Player);
                 Assert.AreEqual(PlayType.Block, _plays.Last().PlayType);
                 Assert.AreEqual(_playerB, _plays.Last().Player);
-                Assert.AreEqual(2, _plays.First().Points);
+                Assert.AreEqual(3, _plays.First().Points);
             });
         }
         [Test]

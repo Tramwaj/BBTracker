@@ -132,13 +132,13 @@
 
             <Button x:Name="MadeFieldGoalButton" Content="Trafiony" Grid.Column="0" Grid.ColumnSpan="2"
                     Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
-                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Made"/>
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Make"/>
             <Button x:Name="MissedFieldGoalButton" Content="Nietrafiony" Grid.Column="2" Grid.ColumnSpan="2"
                     Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
-                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Missed"/>
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Miss"/>
             <Button x:Name="BlockedFieldGoalButton" Content="Zablokowany" Grid.Column="4" Grid.ColumnSpan="2"
                     Visibility="{Binding ChooseFieldGoalOutcomeVisibility}"
-                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Blocked"/>
+                    Command="{Binding FieldGoalOutcomeCommand}" CommandParameter="Block"/>
 
             <Button x:Name="NoAssistButton" Content="Bez asysty" Grid.Column="0" Grid.ColumnSpan="6"
                     Visibility="{Binding ChooseAssisterVisibility}"
@@ -269,7 +269,7 @@
                         </Grid.ColumnDefinitions>
                         <!--<TextBlock Text="1"/>-->
                         <Label Content="{Binding Name}" Grid.Column="0"/>
-                        <Label Content="{Binding Minutes}" Grid.Column="1"/>
+                        <Label Content="{Binding CurrentPlayingTime}" Grid.Column="1"/>
                         <Label Content="{Binding Points}" Grid.Column="2"/>
                         <Label Content="{Binding Assists}" Grid.Column="3"/>
                         <Label Content="{Binding DefensiveRebounds}" Grid.Column="4"/>
