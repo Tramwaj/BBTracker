@@ -36,16 +36,15 @@ namespace BBTracker.ViewModels
 
         public bool PossesionTeamB { get; set; }
         public int TeamSize { get; set; }
-        public Play _play { get; set; }
-        private PlayFactory _playFactory; 
+        private Play _play;
+        private PlayCreator _playFactory; 
         
         public string InfoText { get; set; }
         private IDataAccess _dataAccess;
 
-        public ObservableCollection<PlayerStats> StatsListTeamA { get; set; }
-        public CurrentStatsService StatsServiceA;
-        public ObservableCollection<PlayerStats> StatsListTeamB { get; set; }
-        public CurrentStatsService StatsServiceB;
+        public ObservableCollection<PlayerStatsCurrentGame> StatsListTeamA { get; set; }
+        public CurrentStatsService Stats { get; set; }
+        public ObservableCollection<PlayerStatsCurrentGame> StatsListTeamB { get; set; }
 
         public CurrentGameViewModel(IDataAccess dataAccess)
         {
@@ -62,24 +61,16 @@ namespace BBTracker.ViewModels
             //SetDefaultButtonsVisible();
             SetZeroVisibility();
             GameNotStarted = true;
-            StatsListTeamA = new ObservableCollection<PlayerStats>();
-            StatsServiceA = new CurrentStatsService(StatsListTeamA);
-            StatsListTeamB = new ObservableCollection<PlayerStats>();
-            StatsServiceB = new CurrentStatsService(StatsListTeamB);
+            StatsListTeamA = new ObservableCollection<PlayerStatsCurrentGame>();
+            StatsListTeamB = new ObservableCollection<PlayerStatsCurrentGame>();
+            Stats = new CurrentStatsService(StatsListTeamA, StatsListTeamB);            
         }
 
         private void UpdateStatsHandler(object sender, NotifyCollectionChangedEventArgs args)
         {
             foreach (var play in args.NewItems)
-            {
-                if ((play as Play).TeamB)
-                {
-                    StatsServiceB.AddPlay(play as Play);
-                }
-                else
-                {
-                    StatsServiceA.AddPlay(play as Play);
-                }
+            {                
+                    Stats.AddPlay(play as Play);
             }
             //StatsService.AddPlays(new List<Play>(args.NewItems));
         }
@@ -102,6 +93,7 @@ namespace BBTracker.ViewModels
         {
             StartGameCommand = new RelayCommand(StartGame);
             EndGameCommand = new RelayCommand(EndGame);
+            CancelActionCommand = new RelayCommand(CancelAction);
             SwitchPossesionCommand = new RelayCommand(SwitchPossession);
             ChoosePlayCommand = new RelayCommand<string>((choice) => ChoosePlay(choice));
             ChoosePlayerCommand = new RelayCommand<int>((id) => ChoosePlayer(id));
@@ -129,7 +121,7 @@ namespace BBTracker.ViewModels
         {
             Game = new Game();
             Plays = new ObservableCollection<Play>();
-            _playFactory = new PlayFactory(Game);
+            _playFactory = new PlayCreator(Game);
 
             Plays.CollectionChanged += UpdateStatsHandler;
 
@@ -181,25 +173,20 @@ namespace BBTracker.ViewModels
 
             GameNotStarted = true;
             GameStarted = false;
-        }
-
-        private void SaveGameInfo()
-        {
-
-        }
+        }        
 
         private void CheckInPlayers()
         {            
             foreach (Player player in TeamAOnCourt)
             {
-                _playFactory.SelectPlayer(player,false);
+                _playFactory.NewPlay(player,false);
                 _playFactory.ChoosePlayType(PlayType.CheckIn);
                 Plays.Add(_playFactory.GetPlays().First());
                 _playFactory.Clear();
             }
             foreach (Player player in TeamBOnCourt)
             {
-                _playFactory.SelectPlayer(player, true);
+                _playFactory.NewPlay(player, true);
                 _playFactory.ChoosePlayType(PlayType.CheckIn);
                 Plays.Add(_playFactory.GetPlays().First());
                 _playFactory.Clear();
@@ -210,7 +197,7 @@ namespace BBTracker.ViewModels
         {
             foreach (Player player in TeamAOnCourt)
             {
-                _playFactory.SelectPlayer(player, false);
+                _playFactory.NewPlay(player, false);
                 _playFactory.ChoosePlayType(PlayType.CheckOut);
                 Plays.Add(_playFactory.GetPlays().First());
                 _playFactory.Clear();
@@ -219,13 +206,21 @@ namespace BBTracker.ViewModels
             {
                 _play = NewPlayNow(player, true);
 
-                _playFactory.SelectPlayer(player, true);
+                _playFactory.NewPlay(player, true);
                 _playFactory.ChoosePlayType(PlayType.CheckOut);
                 Plays.Add(_playFactory.GetPlays().First());
                 _playFactory.Clear();
             }
         }
 
+        public ICommand CancelActionCommand { get; private set; }
+        private void CancelAction()
+        {
+            _play = null;
+            _playFactory.Clear();
+            SetDefaultButtonsVisibleOnly();
+            SetPlayersVisibility();
+        }
 
         public ICommand ChoosePlayerCommand { get; set; }
         private void ChoosePlayer(int Id)
@@ -291,9 +286,9 @@ namespace BBTracker.ViewModels
                     _play.PlayType = PlayType.TurnOver;
                     Plays.Add(_play);
                     _play = NewPlayFrom(_play, PlayType.Steal, false);
-
-                    ChooseTurnoverCauserVisibility = Visibility.Visible;
-                    SetPlayersVisibility(true);
+                    SwitchPossession();
+                    ChooseTurnoverCauserVisibility = Visibility.Visible;                    
+                    SetPlayersVisibility(false);
                     InfoText = "Czy ktoś przejął piłkę?";
                     break;
                 case "Substitution":
