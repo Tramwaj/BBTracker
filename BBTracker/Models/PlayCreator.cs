@@ -7,14 +7,14 @@ using System.Linq;
 
 namespace BBTracker.Models
 {
-    public class PlayFactory
+    public class PlayCreator
     {
         private List<Play> _plays;
         private Play _play;
         private readonly Game _game;
         public bool HasPlay => _plays.Any();
 
-        public PlayFactory(Game game)
+        public PlayCreator(Game game)
         {
             _game = game;
             _play = new Play();
@@ -22,10 +22,10 @@ namespace BBTracker.Models
         }
 
 
-        public void SelectPlayer(Player player, bool teamB)
+        public void NewPlay(Player player, bool teamB)
         {
             _play.Player = player;
-            if (this.HasPlay) SelectSecondPlayer(player, teamB);
+            //if (this.HasPlay) ConsecutivePlay(player, teamB);
 
             _play.TeamB = teamB;
             _play.Date = DateTime.Now.Date;
@@ -33,23 +33,39 @@ namespace BBTracker.Models
             _play.Game = _game;
         }
 
-        private void SelectSecondPlayer(Player player, bool teamB)
+        public void ConsecutivePlay(Player player, bool teamB)
         {
             _play.Player = player;
             _play.TeamB = teamB;
+            UpdateAdditionalFields(player);            
             _plays.Add(_play);
         }
-
-        public void Cancel()
+        private void UpdateAdditionalFields(Player player)
         {
-            _play = new Play();
-            _plays = new List<Play>();
+            switch (_play.PlayType)
+            {     
+                case PlayType.Assist:
+                    _plays.Last().Assister = player;
+                    _play.AssistedPlayer = _plays.Last().Player;
+                    break;               
+                case PlayType.Block:
+                    _plays.Last().Blocker = player;
+                    _play.BlockedPlayer = _plays.Last().Player;
+                    break;
+                case PlayType.Steal:
+                    _plays.Last().TurnoverCauser = player;
+                    _play.StolenFrom = _plays.Last().Player;
+                    break;                
+                case PlayType.Foul:
+                    _plays.Last().Fouler = player;
+                    _play.FouledPlayer = _plays.Last().Player;
+                    break;
+                case PlayType.Rebound:
+                    _play.OffensiveRebound = _play.TeamB == _plays.Last().TeamB ? true : false;
+                    break;
+            }
         }
 
-        public void Clear()
-        {
-            Cancel();
-        }
 
 
         public void ChoosePlayType(PlayType playType)
@@ -81,6 +97,16 @@ namespace BBTracker.Models
                 GameTime = _play.GameTime,
                 Points = _play.Points
             };
+        }
+        private void Cancel()
+        {
+            _play = new Play();
+            _plays = new List<Play>();
+        }
+
+        public void Clear()
+        {
+            Cancel();
         }
 
 
@@ -122,9 +148,9 @@ namespace BBTracker.Models
         }
 
         // public void ChoosePlaytype(PlayType playType)
-        public ICollection<Play> GetPlays()
+        public ICollection<Play> GetPlays() //Flush()??
         {
             return _plays;
-        }
+        }        
     }
 }
